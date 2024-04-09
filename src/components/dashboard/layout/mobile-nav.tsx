@@ -94,7 +94,7 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
           component="a"
           endIcon={<ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />}
           fullWidth
-          href="/"
+          href="/dashboard/account"
           sx={{ mt: 2 }}
           target="_blank"
           variant="contained"

@@ -7,6 +7,6 @@ export const navItems = [
   { key: 'customers', title: 'Train details', href: paths.dashboard.customers, icon: 'users' },
   { key: 'integrations', title: 'Integrations', href: paths.dashboard.integrations, icon: 'plugs-connected' },
   { key: 'settings', title: 'Settings', href: paths.dashboard.settings, icon: 'gear-six' },
-  { key: 'account', title: 'Add / Delete Train', href: paths.dashboard.account, icon: 'x-square' },
+  // { key: 'account', title: 'Add / Delete Train', href: paths.dashboard.account, icon: 'x-square' },
   // { key: 'error', title: 'Error', href: paths.errors.notFound, icon: 'x-square' },
 ] satisfies NavItemConfig[];
