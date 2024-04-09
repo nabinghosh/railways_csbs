@@ -13,21 +13,24 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 // import Select from '@mui/material/Select';
 import Grid from '@mui/material/Unstable_Grid2';
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from '@/lib/firebase';
 
-// const states = [
-//   { value: 'alabama', label: 'Alabama' },
-//   { value: 'new-york', label: 'New York' },
-//   { value: 'san-francisco', label: 'San Francisco' },
-//   { value: 'los-angeles', label: 'Los Angeles' },
-// ] as const;
 
 export function DeleteTrain(): React.JSX.Element {
+  const [trainName, setTrainName] = React.useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    try {
+      await deleteDoc(doc(db, 'trains', trainName));
+      // console.log('Train deleted successfully');
+    } catch (error) {
+      // console.error('Error deleting train:', error);
+    }
+  };
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader subheader="The information can be edited" title="Delete Train Details" />
         <Divider />
@@ -36,10 +39,10 @@ export function DeleteTrain(): React.JSX.Element {
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Train Name</InputLabel>
-                <OutlinedInput label="Train name" name="train" />
+                <OutlinedInput label="Train name" name="train" value={trainName} onChange={(e) => {setTrainName(e.target.value)}} />
               </FormControl>
             </Grid>
-            <Grid md={6} xs={12}>
+            {/* <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>From City</InputLabel>
                 <OutlinedInput label="From City" name="city" />
@@ -50,13 +53,13 @@ export function DeleteTrain(): React.JSX.Element {
                 <InputLabel>To City</InputLabel>
                 <OutlinedInput label="To City" name="To City" type="city" />
               </FormControl>
-            </Grid>
+            </Grid> */}
             
           </Grid>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">Delete</Button>
+        <Button variant="contained" type="submit">Delete</Button>
         </CardActions>
       </Card>
     </form>
