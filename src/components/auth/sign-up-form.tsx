@@ -42,6 +42,7 @@ export function SignUpForm(): React.JSX.Element {
   const { checkSession } = useUser();
 
   const [isPending, setIsPending] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   const {
     control,
@@ -49,7 +50,7 @@ export function SignUpForm(): React.JSX.Element {
     setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
-
+  const [credentialsMatch, setCredentialsMatch] = React.useState(true);
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
       setIsPending(true);
@@ -57,12 +58,25 @@ export function SignUpForm(): React.JSX.Element {
       const { error } = await authClient.signUp(values);
 
       if (error) {
+        setErrorMessage(error);
+        if (error === 'User does not exist') {
+          setIsPending(true);
+          return;
+        }
+        if (error === 'Invalid credentials') {
+          
+          setCredentialsMatch(false);
+          setIsPending(false);
+          return;
+        }
         setError('root', { type: 'server', message: error });
+        setErrorMessage(error);
         setIsPending(false);
         return;
       }
 
       // Refresh the auth state
+      setCredentialsMatch(true);
       await checkSession?.();
 
       // UserProvider, for this case, will not refresh the router
@@ -100,7 +114,7 @@ export function SignUpForm(): React.JSX.Element {
             control={control}
             name="lastName"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.firstName)}>
+              <FormControl error={Boolean(errors.lastName)}>
                 <InputLabel>Last name</InputLabel>
                 <OutlinedInput {...field} label="Last name" />
                 {errors.firstName ? <FormHelperText>{errors.firstName.message}</FormHelperText> : null}
@@ -147,12 +161,12 @@ export function SignUpForm(): React.JSX.Element {
             )}
           />
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
+          <Button disabled={isPending || !credentialsMatch} type="submit" variant="contained">
             Sign up
           </Button>
         </Stack>
       </form>
-      <Alert color="warning">Created users are not persisted</Alert>
+      {errorMessage !== null && <Alert color="warning">{errorMessage}</Alert>}
     </Stack>
   );
 }

@@ -4,7 +4,7 @@ import type { User } from '@/types/user';
 import { redirect } from 'next/navigation';
 import { auth, db} from '@/lib/firebase';
 import {  createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc,getDoc } from "firebase/firestore"; 
 
 
 // function generateToken(): string {
@@ -16,8 +16,10 @@ import { doc, setDoc } from "firebase/firestore";
 const user = {
   id: 'USR-000',
   avatar: '/assets/avatar.png',
+  name: {
   firstName: 'Sofia',
   lastName: 'Rivers',
+  },
   email: 'sofia@devias.io',
 } satisfies User;
 
@@ -53,34 +55,39 @@ class AuthClient {
   user: User = {
     id: '',
     avatar: '',
-    firstName: '',
-    lastName: '',
+    name : {
+      firstName: '',
+      lastName: '',
+    },
     email: '',
+    token: '',
   };
   async signUp(params: SignUpParams): Promise<{ error?: string }> {
     const { firstName, lastName, email, password } = params;
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+      const docRef = doc(db, 'users', email);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        // User already exists, return an error
+        return { error: 'User already exists' };
+      }
       if (!userCredential) {
-        throw new Error("Couldn't create user");
+        return { error: "Couldn't create user"};
       }
       user.id = userCredential.user.uid;
       user.email = email;
-      user.firstName = firstName;
-      user.lastName = lastName;
+      user.name.firstName = firstName;
+      user.name.lastName = lastName;
       user.avatar = '/assets/avatar.png';
       const newuser = userCredential.user;
       const idTokenResult = await newuser.getIdTokenResult();
       const uid = newuser.uid;
       
-      await setDoc(doc(db, 'users', uid), {
+      await setDoc(doc(db, 'users', email), {
         ...params,
         id: uid,
         token: idTokenResult.token,
-        first_name: firstName,
-        last_name: lastName,
-        email: idTokenResult.claims.email,
       });
       redirect('/auth/sign-in');
       return {};
