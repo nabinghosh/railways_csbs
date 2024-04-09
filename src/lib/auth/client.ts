@@ -1,6 +1,7 @@
 'use client';
 // import type { Admin } from '@/types/admin';
 import type { User } from '@/types/user';
+import type { Train } from '@/types/train';
 import { redirect } from 'next/navigation';
 import { auth, db} from '@/lib/firebase';
 import {  createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
@@ -62,6 +63,19 @@ class AuthClient {
     email: '',
     token: '',
   };
+
+  train: Train = {
+    trainName:'',
+    fromCity:'',
+    toCity:'',
+    seatsAvailable:0,
+    ticketPrices:{
+      economy:0,
+      business:0,
+      firstClass:0,
+    },
+  };
+
   async signUp(params: SignUpParams): Promise<{ error?: string }> {
     const { firstName, lastName, email, password } = params;
     try {

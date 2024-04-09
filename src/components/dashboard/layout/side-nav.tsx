@@ -74,7 +74,7 @@ export function SideNav(): React.JSX.Element {
             Are you a Admin?
           </Typography>
           <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-            log in to access the admin options
+            access the admin options
           </Typography>
         </div>
         {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
