@@ -76,8 +76,10 @@ export function CustomersTable({
               <TableCell>Train Name</TableCell>
               <TableCell>Source</TableCell>
               <TableCell>Destination</TableCell>
-              <TableCell>Time</TableCell>
+              <TableCell>Seats</TableCell>
+              <TableCell>Seat Type</TableCell>
               <TableCell>Date</TableCell>
+              
             </TableRow>
           </TableHead>
           <TableBody>

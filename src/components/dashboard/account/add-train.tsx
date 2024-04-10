@@ -19,7 +19,7 @@ export function AddTrain(): React.JSX.Element {
   const [trainName, setTrainName] = useState('');
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
-  const [seatsAvailable, setSeatsAvailable] = useState(Number);
+  let seatsAvailable = 60;
   const [ticketPriceEconomy, setTicketPriceEconomy] = useState(Number);
   const [ticketPriceBusiness, setTicketPriceBusiness] = useState(Number);
   const [ticketPriceFirstClass, setTicketPriceFirstClass] = useState(Number);
@@ -76,7 +76,7 @@ export function AddTrain(): React.JSX.Element {
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Seats Available</InputLabel>
-                <OutlinedInput defaultValue="60" label="Seats Available" value={seatsAvailable} onChange={(e) => { setSeatsAvailable(Number(e.target.value)) }} />
+                <OutlinedInput defaultValue="60" label="Seats Available" value={seatsAvailable} onChange={(e) => { seatsAvailable = parseInt(e.target.value) }} />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
