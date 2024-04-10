@@ -28,7 +28,7 @@ export default function Page(): React.JSX.Element {
         <TasksProgress sx={{ height: '100%' }} value={75.5} />
       </Grid> */}
       <Grid lg={3} sm={6} xs={12}>
-        <TotalProfit sx={{ height: '100%' }} value="$15k" />
+        <TotalProfit sx={{ height: '100%' }} value="25" />
       </Grid>
       {/* <Grid lg={8} xs={12}>
         <Sales
@@ -83,42 +83,42 @@ export default function Page(): React.JSX.Element {
         <LatestOrders
           orders={[
             {
-              id: 'ORD-007',
+              id: '2',
               customer: { name: 'Ekaterina Tankova' },
               amount: 30.5,
               status: 'pending',
               createdAt: dayjs().subtract(10, 'minutes').toDate(),
             },
             {
-              id: 'ORD-006',
+              id: '6',
               customer: { name: 'Cao Yu' },
               amount: 25.1,
               status: 'delivered',
               createdAt: dayjs().subtract(10, 'minutes').toDate(),
             },
             {
-              id: 'ORD-004',
+              id: '7',
               customer: { name: 'Alexa Richardson' },
               amount: 10.99,
               status: 'refunded',
               createdAt: dayjs().subtract(10, 'minutes').toDate(),
             },
             {
-              id: 'ORD-003',
+              id: '3',
               customer: { name: 'Anje Keizer' },
               amount: 96.43,
               status: 'pending',
               createdAt: dayjs().subtract(10, 'minutes').toDate(),
             },
             {
-              id: 'ORD-002',
+              id: '4',
               customer: { name: 'Clarke Gillebert' },
               amount: 32.54,
               status: 'delivered',
               createdAt: dayjs().subtract(10, 'minutes').toDate(),
             },
             {
-              id: 'ORD-001',
+              id: '3',
               customer: { name: 'Adam Denisov' },
               amount: 16.76,
               status: 'delivered',
