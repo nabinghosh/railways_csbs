@@ -56,6 +56,7 @@ export function SignUpForm(): React.JSX.Element {
       setIsPending(true);
 
       const { error } = await authClient.signUp(values);
+      
 
       if (error) {
         setErrorMessage(error);
@@ -81,7 +82,7 @@ export function SignUpForm(): React.JSX.Element {
 
       // UserProvider, for this case, will not refresh the router
       // After refresh, GuestGuard will handle the redirect
-      router.refresh();
+      router.push('/auth/sign-in');
     },
     [checkSession, router, setError]
   );
@@ -166,7 +167,7 @@ export function SignUpForm(): React.JSX.Element {
           </Button>
         </Stack>
       </form>
-      {errorMessage !== null && <Alert color="warning">{errorMessage}</Alert>}
+      {errorMessage ? <Alert color="warning">{errorMessage}</Alert> : null}
     </Stack>
   );
 }
