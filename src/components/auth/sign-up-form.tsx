@@ -92,7 +92,7 @@ export function SignUpForm(): React.JSX.Element {
         <Typography variant="h4">Sign up</Typography>
         <Typography color="text.secondary" variant="body2">
           Already have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.signIn} underline="hover" variant="subtitle2">
+          <Link component={RouterLink} color='#f0a137' href={paths.auth.signIn} underline="hover" variant="subtitle2">
             Sign in
           </Link>
         </Typography>
@@ -152,7 +152,7 @@ export function SignUpForm(): React.JSX.Element {
                   control={<Checkbox {...field} />}
                   label={
                     <React.Fragment>
-                      I have read the <Link>terms and conditions</Link>
+                      I have read the <Link color='#f0a137'>terms and conditions</Link>
                     </React.Fragment>
                   }
                 />
@@ -161,7 +161,7 @@ export function SignUpForm(): React.JSX.Element {
             )}
           />
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending || !credentialsMatch} type="submit" variant="contained">
+          <Button disabled={isPending || !credentialsMatch} color='warning' type="submit" variant="contained">
             Sign up
           </Button>
         </Stack>

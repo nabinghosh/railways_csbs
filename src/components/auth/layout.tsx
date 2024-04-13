@@ -34,7 +34,7 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
       <Box
         sx={{
           alignItems: 'center',
-          background: 'radial-gradient(50% 50% at 50% 50%, #122647 0%, #090E23 100%)',
+          background: 'radial-gradient(50% 50% at 50% 55%, #f1c167 50%, #f0a137 100%)',
           color: 'var(--mui-palette-common-white)',
           display: { xs: 'none', lg: 'flex' },
           justifyContent: 'center',
@@ -45,19 +45,19 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
           <Stack spacing={1}>
             <Typography color="inherit" sx={{ fontSize: '24px', lineHeight: '32px', textAlign: 'center' }} variant="h1">
               Welcome to{' '}
-              <Box component="span" sx={{ color: '#15b79e' }}>
-                Devias Kit
+              <Box component="span" sx={{ color: '#2d1a0b' }}>
+                Indian Railways 
               </Box>
             </Typography>
-            <Typography align="center" variant="subtitle1">
-              A professional template that comes with ready-to-use MUI components.
+            <Typography align="center"  variant="subtitle1">
+              Book your tickets with ease and comfort.
             </Typography>
           </Stack>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box
               component="img"
-              alt="Widgets"
-              src="/assets/auth-widgets.png"
+              alt="Railways"
+              src="/assets/rail_logo1.png"
               sx={{ height: 'auto', width: '100%', maxWidth: '600px' }}
             />
           </Box>
