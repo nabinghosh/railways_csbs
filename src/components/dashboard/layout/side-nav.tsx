@@ -19,8 +19,12 @@ import { Logo } from '@/components/core/logo';
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
 
+import { auth } from '@/lib/firebase';
+
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
+  const email = auth.currentUser?.email;
+  const adminEmail = 'admin@admin.com';
 
   return (
     <Box
@@ -69,6 +73,7 @@ export function SideNav(): React.JSX.Element {
 
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Stack spacing={2} sx={{ p: '12px' }}>
+      {email === adminEmail && (
         <div>
           <Typography color="var(--mui-palette-neutral-100)" variant="subtitle2">
             Are you a Admin?
@@ -76,26 +81,19 @@ export function SideNav(): React.JSX.Element {
           <Typography color="var(--mui-palette-neutral-400)" variant="body2">
             access the admin options
           </Typography>
+          <Button
+            component="a"
+            endIcon={<ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />}
+            fullWidth
+            href="/dashboard/account"
+            sx={{ mt: 2 }}
+            target="_blank"
+            variant="contained"
+          >
+            Admin
+          </Button>
         </div>
-        {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box
-            component="img"
-            alt="Pro version"
-            src="/assets/devias-kit-pro.png"
-            sx={{ height: 'auto', width: '160px' }}
-          />
-        </Box> */}
-        <Button
-          component="a"
-          endIcon={<ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />}
-          fullWidth
-          href="/dashboard/account"
-          sx={{ mt: 2 }}
-          target="_blank"
-          variant="contained"
-        >
-          Admin
-        </Button>
+      )}
       </Stack>
     </Box>
   );
