@@ -32,7 +32,16 @@ export default function DeleteTrain(): React.JSX.Element {
         const data = docs.data() as Train;
         return {
           id: docs.id,
-          ...data,
+          trainNo: data.trainNo,
+          trainName: data.trainName,
+          fromCity: data.fromCity,
+          toCity: data.toCity,
+          seatsAvailable: data.seatsAvailable,
+          trainType: data.trainType,
+          frequency: data.frequency,
+          departureTime: data.departureTime,
+          destinationTime: data.destinationTime,
+          ticketPrice: data.ticketPrice,
         };
       });
       setTrains(newTrains);
