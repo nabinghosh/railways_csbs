@@ -13,7 +13,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { auth, db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 
 export interface Reservation {
   referenceNo: string;
@@ -22,6 +22,20 @@ export interface Reservation {
   toCity: string;
   numTickets: number;
   dateTime: Date;
+}
+
+export interface Train {
+  id: string;
+  trainNo: string;
+  trainName: string;
+  fromCity: string;
+  toCity: string;
+  seatsAvailable: number;
+  trainType: string;
+  frequency: string;
+  departureTime: string;
+  destinationTime: string;
+  ticketPrice: string;
 }
 
 export function LatestReservations(): React.JSX.Element {
@@ -37,9 +51,9 @@ export function LatestReservations(): React.JSX.Element {
         if (user) {
           const q = query(collection(db, 'reservations'), where('email', '==', email));
           const querySnapshot = await getDocs(q);
-          const newFetchedReservations: Reservation[] = querySnapshot.docs.map((doc) => ({
-            referenceNo: doc.id,
-            ...doc.data(),
+          const newFetchedReservations: Reservation[] = querySnapshot.docs.map((docs) => ({
+            referenceNo: docs.id,
+            ...docs.data(),
           } as Reservation));
           setReservations(newFetchedReservations);
           setLoading(false);
@@ -51,6 +65,22 @@ export function LatestReservations(): React.JSX.Element {
     };
     fetchReservations();
   }, []);
+
+  const deleteReservation = async (reservation: Reservation): Promise<void> => {
+    try {
+      await deleteDoc(doc(collection(db, 'reservations'), reservation.referenceNo));
+      setReservations(reservations.filter((r) => r.referenceNo !== reservation.referenceNo));
+      // Update train seats available
+      const trainDoc = doc(db, 'trains', reservation.trainId);
+      const trainSnap = await getDoc(trainDoc);
+      const train = trainSnap.data() as Train;
+      await updateDoc(trainDoc, {
+        seatsAvailable: train.seatsAvailable + reservation.numTickets,
+      });
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -70,6 +100,7 @@ export function LatestReservations(): React.JSX.Element {
               <TableCell>To City</TableCell>
               <TableCell>Number of Tickets</TableCell>
               <TableCell>Date and Time</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -81,6 +112,9 @@ export function LatestReservations(): React.JSX.Element {
                 <TableCell>{reservation.toCity}</TableCell>
                 <TableCell>{reservation.numTickets}</TableCell>
                 <TableCell>{reservation.dateTime.toLocaleString()}</TableCell>
+                <TableCell>
+              <Button onClick={() => deleteReservation(reservation)}>Delete</Button>
+            </TableCell>
               </TableRow>
             ))}
           </TableBody>

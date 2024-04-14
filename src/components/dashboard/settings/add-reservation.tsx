@@ -18,7 +18,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 // import { doc, setDoc, updateDoc, } from "firebase/firestore";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, setDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 
 import { auth, db } from '@/lib/firebase';
 
@@ -95,7 +95,8 @@ export function CreateReservation(): React.JSX.Element {
         numTickets,
         dateTime: new Date().toISOString(),
       };
-      await addDoc(collection(db, 'reservations'), reservationData);
+      const docRef = doc(collection(db, 'reservations'), reservationData.referenceNo);
+      await setDoc(docRef, reservationData);
       alert('Reservation successful!');
     }
   };
