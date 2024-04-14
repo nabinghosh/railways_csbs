@@ -1,67 +1,159 @@
-'use client';
-
-import * as React from 'react';
-import Button from '@mui/material/Button';
+'use client'
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-// import Select from '@mui/material/Select';
-import Grid from '@mui/material/Unstable_Grid2';
-import { doc, deleteDoc } from "firebase/firestore";
+import { collection, doc, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
 
+interface Train {
+  id: string;
+  trainNo: string;
+  trainName: string;
+  fromCity: string;
+  toCity: string;
+  seatsAvailable: string;
+  trainType: string;
+  frequency: string;
+  departureTime: string;
+  destinationTime: string;
+}
 
-export function DeleteTrain(): React.JSX.Element {
-  const [trainName, setTrainName] = React.useState('');
+export default function DeleteTrain(): React.JSX.Element  {
+  const [trains, setTrains] = useState<Train[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [newTrain, setNewTrain] = useState<Partial<Train>>({});
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
-    try {
-      await deleteDoc(doc(db, 'trains', trainName));
-      // console.log('Train deleted successfully');
-    } catch (error) {
-      // console.error('Error deleting train:', error);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'trains'), (snapshot) => {
+      const newTrains: Train[] = snapshot.docs.map((docs) => {
+        const data = docs.data() as Train;
+        return {
+          ...data,
+        };
+      });
+      setTrains(newTrains);
+      setLoading(false);
+    }, (_) => {
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const deleteTrain = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, 'trains', id));
+  };
+
+  const startEdit = (train: Train): void => {
+    setEditId(train.id);
+    setNewTrain(train);
+  };
+
+  const updateTrain = async (): Promise<void> => {
+    if (editId && newTrain) {
+      const trainRef = doc(db, 'trains', editId);
+      await updateDoc(trainRef, newTrain);
+      setEditId(null);
+      setNewTrain({});
     }
   };
+
+  const handleChange = (field: keyof Train, value: string): void => {
+    setNewTrain(prev => ({ ...prev, [field]: value }));
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader subheader="The information can be edited" title="Delete Train Details" />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Train Name</InputLabel>
-                <OutlinedInput label="Train name" name="train" value={trainName} onChange={(e) => {setTrainName(e.target.value)}} />
-              </FormControl>
-            </Grid>
-            {/* <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>From City</InputLabel>
-                <OutlinedInput label="From City" name="city" />
-              </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>To City</InputLabel>
-                <OutlinedInput label="To City" name="To City" type="city" />
-              </FormControl>
-            </Grid> */}
-            
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button variant="contained" type="submit">Delete</Button>
-        </CardActions>
-      </Card>
-    </form>
+    <Card>
+      <CardContent>
+      <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Train No</TableCell>
+            <TableCell>Train Name</TableCell>
+            <TableCell>From City</TableCell>
+            <TableCell>To City</TableCell>
+            <TableCell>Seats Available</TableCell>
+            <TableCell>Train Type</TableCell>
+            <TableCell>Frequency</TableCell>
+            <TableCell>Departure Time</TableCell>
+            <TableCell>Destination Time</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {trains.map((train) => (
+            <TableRow key={train.id}>
+              {editId === train.id ? (
+                <>
+                  <TableCell>
+                    <TextField value={newTrain.trainNo} onChange={(e) => { handleChange('trainNo', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.trainName} onChange={(e) => { handleChange('trainName', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.fromCity} onChange={(e) => { handleChange('fromCity', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.toCity} onChange={(e) => { handleChange('toCity', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.seatsAvailable} onChange={(e) => { handleChange('seatsAvailable', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.trainType} onChange={(e) => { handleChange('trainType', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.frequency} onChange={(e) => { handleChange('frequency', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.departureTime} onChange={(e) => { handleChange('departureTime', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <TextField value={newTrain.destinationTime} onChange={(e) => { handleChange('destinationTime', e.target.value); }} />
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="contained" color="primary" onClick={updateTrain}>
+                      Save
+                    </Button>
+                  </TableCell>
+                </>
+              ) : (
+                <>
+                  <TableCell>{train.trainNo}</TableCell>
+                  <TableCell>{train.trainName}</TableCell>
+                  <TableCell>{train.fromCity}</TableCell>
+                  <TableCell>{train.toCity}</TableCell>
+                  <TableCell>{train.seatsAvailable}</TableCell>
+                  <TableCell>{train.trainType}</TableCell>
+                  <TableCell>{train.frequency}</TableCell>
+                  <TableCell>{train.departureTime}</TableCell>
+                  <TableCell>{train.destinationTime}</TableCell>
+                  <TableCell  sx={{ spacing:3 }}>
+                    <Button variant="contained" color="primary" onClick={() => { startEdit(train); }}>
+                      Edit
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={() => deleteTrain(train.id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    </CardContent>
+    </Card>
   );
 }

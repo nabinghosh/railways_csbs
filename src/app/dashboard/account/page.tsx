@@ -6,7 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { config } from '@/config';
 import { AddTrain } from '@/components/dashboard/account/add-train';
-import { DeleteTrain } from '@/components/dashboard/account/delete-train';
+import DeleteTrain from '@/components/dashboard/account/delete-train';
 // import { AccountInfo } from '@/components/dashboard/account/account-info';
 
 export const metadata = { title: `Account | Dashboard | ${config.site.name}` } satisfies Metadata;
@@ -21,10 +21,10 @@ export default function Page(): React.JSX.Element {
         {/* <Grid lg={4} md={6} xs={12}>
           <AccountInfo />
         </Grid> */}
-        <Grid lg={8} md={6} xs={12}>
+        <Grid lg={12} md={6} xs={12}>
           <AddTrain />
         </Grid>
-        <Grid lg={8} md={6} xs={12}>
+        <Grid lg={12} md={6} xs={12}>
           <DeleteTrain/>
         </Grid>
       </Grid>

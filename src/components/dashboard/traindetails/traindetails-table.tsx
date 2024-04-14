@@ -1,6 +1,8 @@
 'use client';
 
 import * as React from 'react';
+// import React, { useState, useEffect } from 'react';
+
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,6 +17,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+// import {db, } from '@/lib/firebase';
 
 import { useSelection } from '@/hooks/use-selection';
 
@@ -22,7 +25,7 @@ function noop(): void {
   // do nothing
 }
 
-export interface Customer {
+export interface Trains {
   id: string;
   avatar: string;
   name: string;
@@ -32,19 +35,19 @@ export interface Customer {
   createdAt: Date;
 }
 
-interface CustomersTableProps {
+interface TrainsTableProps {
   count?: number;
   page?: number;
-  rows?: Customer[];
+  rows?: Trains[];
   rowsPerPage?: number;
 }
 
-export function CustomersTable({
+export function TrainsTable({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
-}: CustomersTableProps): React.JSX.Element {
+}: TrainsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
     return rows.map((customer) => customer.id);
   }, [rows]);
@@ -73,6 +76,7 @@ export function CustomersTable({
                   }}
                 />
               </TableCell>
+              <TableCell>Train No</TableCell>
               <TableCell>Train Name</TableCell>
               <TableCell>Source</TableCell>
               <TableCell>Destination</TableCell>
