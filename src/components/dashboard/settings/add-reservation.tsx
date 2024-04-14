@@ -18,7 +18,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 // import { doc, setDoc, updateDoc, } from "firebase/firestore";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 
 import { auth, db } from '@/lib/firebase';
 
@@ -38,11 +38,12 @@ export interface Train {
 
 export function CreateReservation(): React.JSX.Element {
   const user = auth.currentUser;
-  // const email = user?.email || '';
+  const email = user?.email || '';
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [trains, setTrains] = useState<Train[]>([]);
   const [loading, setLoading] = useState(false);
+  // const [numTickets, setNumTickets] = useState(1);
 
 
   const handleSubmitSearch = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -52,15 +53,57 @@ export function CreateReservation(): React.JSX.Element {
     const q = query(trainsRef, where('fromCity', '==', fromCity), where('toCity', '==', toCity));
 
     const querySnapshot = await getDocs(q);
-    const newTrains: Train[] = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
+    const newTrains: Train[] = querySnapshot.docs.map((docs) => ({
+      id: docs.id,
+      ...docs.data(),
     } as Train));
     setTrains(newTrains);
     setLoading(false);
   };
 
+  const handleReserve = async (trainId: string): Promise<void> => {
+    const ticketsToReserve = prompt('Enter number of tickets:', '1');
+    if (ticketsToReserve !== null) {
+      const numTickets = parseInt(ticketsToReserve, 10);
+  
+      // Fetch current train data
+      const trainDoc = doc(db, 'trains', trainId);
+      const trainSnapshot = await getDoc(trainDoc);
+      if (!trainSnapshot.exists()) {
+        alert('Train not found');
+        return;
+      }
+      const trainData = trainSnapshot.data() as Train;
+  
+      // Check if there are enough seats available
+      if (trainData.seatsAvailable < numTickets) {
+        alert('Not enough seats available');
+        return;
+      }
+  
+      // Update seatsAvailable in the train data
+      await updateDoc(trainDoc, {
+        seatsAvailable: trainData.seatsAvailable - numTickets,
+      });
+  
+      const reservationData = {
+        email, // Replace with actual user email
+        referenceNo: generateReferenceNo(),
+        fromCity,
+        toCity,
+        trainId,
+        numTickets,
+        dateTime: new Date().toISOString(),
+      };
+      await addDoc(collection(db, 'reservations'), reservationData);
+      alert('Reservation successful!');
+    }
+  };
 
+  const generateReferenceNo = (): string => {
+    // Generate a reference number here, for example:
+    return 'REF' + Math.floor(Math.random() * 1000000);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -103,6 +146,7 @@ export function CreateReservation(): React.JSX.Element {
           <TableCell>Departure Time</TableCell>
           <TableCell>Destination Time</TableCell>
           <TableCell>Ticket Price</TableCell>
+          <TableCell>Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -118,6 +162,9 @@ export function CreateReservation(): React.JSX.Element {
             <TableCell>{train.departureTime}</TableCell>
             <TableCell>{train.destinationTime}</TableCell>
             <TableCell>{train.ticketPrice}</TableCell>
+            <TableCell>
+              <Button onClick={() => handleReserve(train.id)}>Reserve</Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
