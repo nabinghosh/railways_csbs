@@ -69,17 +69,17 @@ export function AddTrain(): React.JSX.Element {
       await setDoc(doc(db, "trains", trainName), trainData);
       // Optionally, reset the form fields after successful submission
       setTrainNo('');
-    setTrainName('');
-    setFromCity('');
-    setToCity('');
-    setSeatsAvailable('');
-    setTrainType('');
-    setFrequency('');
-    setDepartureTime('');
-    setDestinationTime('');
-    setSuccessMessage('Data Saved');
-    // Remove success message after 3 seconds
-    setTimeout(() => { setSuccessMessage(''); }, 3000);
+      setTrainName('');
+      setFromCity('');
+      setToCity('');
+      setSeatsAvailable('');
+      setTrainType('');
+      setFrequency('');
+      setDepartureTime('');
+      setDestinationTime('');
+      setSuccessMessage('Data Saved');
+      // Remove success message after 3 seconds
+      setTimeout(() => { setSuccessMessage(''); }, 3000);
       event.currentTarget.reset();
     } catch (error) {
       // console.error("Error saving train details:", error);

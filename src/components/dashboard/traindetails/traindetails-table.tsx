@@ -20,6 +20,7 @@ export interface Train {
   frequency: string;
   departureTime: Date;
   destinationTime: Date;
+  ticketPrice: string;
 }
 
 export function TrainsTable(): React.JSX.Element {
@@ -58,6 +59,7 @@ export function TrainsTable(): React.JSX.Element {
           <TableCell>Frequency</TableCell>
           <TableCell>Departure Time</TableCell>
           <TableCell>Destination Time</TableCell>
+          <TableCell>Ticket Price</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -72,6 +74,7 @@ export function TrainsTable(): React.JSX.Element {
             <TableCell>{train.frequency}</TableCell>
             <TableCell>{dayjs(train.departureTime).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{dayjs(train.destinationTime).format('DD/MM/YYYY')}</TableCell>
+            <TableCell>{train.ticketPrice}</TableCell>
           </TableRow>
         ))}
       </TableBody>
