@@ -1,137 +1,80 @@
-'use client';
-
-import * as React from 'react';
-// import React, { useState, useEffect } from 'react';
-
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
+'use client'
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-// import {db, } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
+import { onSnapshot, collection } from 'firebase/firestore';
 
-import { useSelection } from '@/hooks/use-selection';
-
-function noop(): void {
-  // do nothing
-}
-
-export interface Trains {
+export interface Train {
   id: string;
-  avatar: string;
-  name: string;
-  email: string;
-  address: { city: string; state: string; country: string; street: string };
-  phone: string;
-  createdAt: Date;
+  trainNo: string;
+  trainName: string;
+  fromCity: string;
+  toCity: string;
+  seatsAvailable: number;
+  trainType: string;
+  frequency: string;
+  departureTime: Date;
+  destinationTime: Date;
 }
 
-interface TrainsTableProps {
-  count?: number;
-  page?: number;
-  rows?: Trains[];
-  rowsPerPage?: number;
-}
+export function TrainsTable(): React.JSX.Element {
+  const [trains, setTrains] = useState<Train[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-export function TrainsTable({
-  count = 0,
-  rows = [],
-  page = 0,
-  rowsPerPage = 0,
-}: TrainsTableProps): React.JSX.Element {
-  const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
-  }, [rows]);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'trains'), (snapshot) => {
+      const newTrains: Train[] = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      } as Train));
+      setTrains(newTrains);
+      setLoading(false);
+    }, (_) => {
+      setLoading(false);
+    });
 
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(rowIds);
+    return () => { unsubscribe(); }; // Cleanup function
+  }, []);
 
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
-  const selectedAll = rows.length > 0 && selected?.size === rows.length;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Card>
-      <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      selectAll();
-                    } else {
-                      deselectAll();
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell>Train No</TableCell>
-              <TableCell>Train Name</TableCell>
-              <TableCell>Source</TableCell>
-              <TableCell>Destination</TableCell>
-              <TableCell>Seats</TableCell>
-              <TableCell>Seat Type</TableCell>
-              <TableCell>Date</TableCell>
-              
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              const isSelected = selected?.has(row.id);
-
-              return (
-                <TableRow hover key={row.id} selected={isSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          selectOne(row.id);
-                        } else {
-                          deselectOne(row.id);
-                        }
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Box>
-      <Divider />
-      <TablePagination
-        component="div"
-        count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
-    </Card>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Train No</TableCell>
+          <TableCell>Train Name</TableCell>
+          <TableCell>Source</TableCell>
+          <TableCell>Destination</TableCell>
+          <TableCell>Seats</TableCell>
+          <TableCell>Seat Type</TableCell>
+          <TableCell>Frequency</TableCell>
+          <TableCell>Departure Time</TableCell>
+          <TableCell>Destination Time</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {trains.map((train) => (
+          <TableRow key={train.id}>
+            <TableCell>{train.trainNo}</TableCell>
+            <TableCell>{train.trainName}</TableCell>
+            <TableCell>{train.fromCity}</TableCell>
+            <TableCell>{train.toCity}</TableCell>
+            <TableCell>{train.seatsAvailable}</TableCell>
+            <TableCell>{train.trainType}</TableCell>
+            <TableCell>{train.frequency}</TableCell>
+            <TableCell>{dayjs(train.departureTime).format('DD/MM/YYYY')}</TableCell>
+            <TableCell>{dayjs(train.destinationTime).format('DD/MM/YYYY')}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

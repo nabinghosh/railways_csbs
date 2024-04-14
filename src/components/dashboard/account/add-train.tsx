@@ -47,6 +47,8 @@ export function AddTrain(): React.JSX.Element {
     const frequency1 = formData.get('frequency') as string;
     const departureTime1 = formData.get('departureTime') as string;
     const destinationTime1 = formData.get('destinationTime') as string;
+    const ticketPrice1 = formData.get('ticketPrice') as string; // Added this line
+
 
     // Construct train data object
     const trainData = {
@@ -59,6 +61,7 @@ export function AddTrain(): React.JSX.Element {
       frequency: frequency1,
       departureTime: departureTime1,
       destinationTime: destinationTime1,
+      ticketPrice: ticketPrice1,
     };
 
     // Save data to Firestore
@@ -161,6 +164,12 @@ export function AddTrain(): React.JSX.Element {
               <FormControl fullWidth required>
                 <InputLabel>Destination Time</InputLabel>
                 <OutlinedInput label="Destination Time" name="destinationTime" type="time" value={destinationTime} onChange={(e) => { setDestinationTime(e.target.value) }} />
+              </FormControl>
+            </Grid>
+            <Grid md={6} xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel>Ticket Price</InputLabel>
+                <OutlinedInput label="Ticket Price" name="ticketPrice" type="number" />
               </FormControl>
             </Grid>
           </Grid>
