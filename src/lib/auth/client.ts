@@ -121,7 +121,6 @@ class AuthClient {
       const newuser = userCredential.user;
       // Make API request
 
-      // We do not handle the API, so we'll check if the credentials match with the hardcoded ones.
       if (!newuser) {
         return { error: 'Invalid credentials' };
         // throw new Error('Invalid credentials');
@@ -132,6 +131,9 @@ class AuthClient {
 
       return {};
     } catch (error) {
+      if (error === 'auth/wrong-password') {
+        return { error: 'Wrong password' };
+      }
       return {  };
     }
   }
