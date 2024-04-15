@@ -9,7 +9,7 @@ import { AddTrain } from '@/components/dashboard/account/add-train';
 import DeleteTrain from '@/components/dashboard/account/delete-train';
 // import { AccountInfo } from '@/components/dashboard/account/account-info';
 
-export const metadata = { title: `Account | Dashboard | ${config.site.name}` } satisfies Metadata;
+export const metadata = { title: `Admin | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export default function Page(): React.JSX.Element {
   return (

@@ -10,18 +10,18 @@ import Typography from '@mui/material/Typography';
 import { config } from '@/config';
 // import { CustomersFilters } from '@/components/dashboard/traindetails/traindetails-filters';
 import { TrainsTable } from '@/components/dashboard/traindetails/traindetails-table';
-import type { Trains } from '@/components/dashboard/traindetails/traindetails-table';
+// import type { Train } from '@/components/dashboard/traindetails/traindetails-table';
 
 export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
 
-const customers = [
-] satisfies Trains[];
+// const customers = [
+// ] satisfies Train[];
 
 export default function Page(): React.JSX.Element {
-  const page = 0;
-  const rowsPerPage = 5;
+  // const page = 0;
+  // const rowsPerPage = 5;
 
-  const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
+  // const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
 
   return (
     <Stack spacing={3}>
@@ -45,15 +45,15 @@ export default function Page(): React.JSX.Element {
       </Stack>
       {/* <CustomersFilters /> */}
       <TrainsTable
-        count={paginatedCustomers.length}
-        page={page}
-        rows={paginatedCustomers}
-        rowsPerPage={rowsPerPage}
+        // count={paginatedCustomers.length}
+        // page={page}
+        // rows={paginatedCustomers}
+        // rowsPerPage={rowsPerPage}
       />
     </Stack>
   );
 }
 
-function applyPagination(rows: Trains[], page: number, rowsPerPage: number): Trains[] {
-  return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-}
+// function applyPagination(rows: Train[], page: number, rowsPerPage: number): Train[] {
+//   return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+// }
