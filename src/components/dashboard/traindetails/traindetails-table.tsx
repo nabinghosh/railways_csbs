@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import { db } from '@/lib/firebase';
 import { onSnapshot, collection } from 'firebase/firestore';
 
@@ -18,8 +18,8 @@ export interface Train {
   seatsAvailable: number;
   trainType: string;
   frequency: string;
-  departureTime: Date;
-  destinationTime: Date;
+  departureTime: string;
+  destinationTime: string;
   ticketPrice: string;
 }
 
@@ -72,8 +72,8 @@ export function TrainsTable(): React.JSX.Element {
             <TableCell>{train.seatsAvailable}</TableCell>
             <TableCell>{train.trainType}</TableCell>
             <TableCell>{train.frequency}</TableCell>
-            <TableCell>{dayjs(train.departureTime).format('DD/MM/YYYY')}</TableCell>
-            <TableCell>{dayjs(train.destinationTime).format('DD/MM/YYYY')}</TableCell>
+            <TableCell>{train.departureTime}</TableCell>
+            <TableCell>{train.destinationTime}</TableCell>
             <TableCell>{train.ticketPrice}</TableCell>
           </TableRow>
         ))}
