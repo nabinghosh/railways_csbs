@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -22,6 +23,7 @@ type Values = zod.infer<typeof schema>;
 const defaultValues = { email: '' } satisfies Values;
 
 export function ResetPasswordForm(): React.JSX.Element {
+  const router = useRouter();
   const [isPending, setIsPending] = React.useState<boolean>(false);
 
   const {
@@ -44,10 +46,11 @@ export function ResetPasswordForm(): React.JSX.Element {
       }
 
       setIsPending(false);
+      router.push('/auth/sign-in');
 
       // Redirect to confirm password reset
     },
-    [setError]
+    [setError, router]
   );
 
   return (
