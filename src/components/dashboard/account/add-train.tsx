@@ -42,7 +42,7 @@ export function AddTrain(): React.JSX.Element {
     const trainName1 = formData.get('train') as string;
     const fromCity1 = formData.get('city') as string;
     const toCity1 = formData.get('toCity') as string;
-    const seatsAvailable1 = formData.get('seatsAvailable') as string; // Changed variable name here
+    const seatsAvailable1 = formData.get('seatsAvailable') as unknown as number;
     const trainType1 = formData.get('trainType') as string;
     const frequency1 = formData.get('frequency') as string;
     const departureTime1 = formData.get('departureTime') as string;
@@ -121,7 +121,7 @@ export function AddTrain(): React.JSX.Element {
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Seats Available</InputLabel>
-                <OutlinedInput label="Seats Available" name="seatsAvailable" value={seatsAvailable} onChange={(e) => { setSeatsAvailable(e.target.value) }} />
+                <OutlinedInput label="Seats Available" type='number' name="seatsAvailable" value={seatsAvailable} onChange={(e) => { setSeatsAvailable(e.target.value) }} />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
