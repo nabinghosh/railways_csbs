@@ -12,7 +12,7 @@ interface Train {
   trainName: string;
   fromCity: string;
   toCity: string;
-  seatsAvailable: string;
+  seatsAvailable: number;
   trainType: string;
   frequency: string;
   departureTime: string;
@@ -119,7 +119,7 @@ export default function DeleteTrain(): React.JSX.Element {
                         <TextField value={newTrain.toCity} onChange={(e) => { handleChange('toCity', e.target.value); }} />
                       </TableCell>
                       <TableCell>
-                        <TextField value={newTrain.seatsAvailable} onChange={(e) => { handleChange('seatsAvailable', e.target.value); }} />
+                        <TextField value={newTrain.seatsAvailable} type="number" onChange={(e) => { handleChange('seatsAvailable', e.target.value); }} />
                       </TableCell>
                       <TableCell>
                         <TextField value={newTrain.trainType} onChange={(e) => { handleChange('trainType', e.target.value); }} />
