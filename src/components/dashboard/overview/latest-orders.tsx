@@ -113,7 +113,7 @@ export function LatestReservations(): React.JSX.Element {
                 <TableCell>{reservation.numTickets}</TableCell>
                 <TableCell>{reservation.dateTime.toLocaleString()}</TableCell>
                 <TableCell>
-              <Button onClick={() => deleteReservation(reservation)}>Delete</Button>
+              <Button onClick={() => deleteReservation(reservation)}>Cancel</Button>
             </TableCell>
               </TableRow>
             ))}

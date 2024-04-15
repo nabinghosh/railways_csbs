@@ -16,3 +16,22 @@ The Railway Reservation System is a software application that allows users to bo
 2. Install the required dependencies: `npm install`
 3. Configure the database connection in the `config.js` file.
 4. Start the application: `npm start`
+
+## Screenshots
+
+![Screenshot 1](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20005830.png)
+![Screenshot 2](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20005909.png)
+
+![Screenshot 3](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010051.png)
+
+![Screenshot 4](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010207.png)
+
+![Screenshot 5](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010243.png)
+
+![Screenshot 6](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010320.png)
+
+![Screenshot 7](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010523.png)
+
+![Screenshot 8](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20010602.png)
+
+![Screenshot 9](https://github.com/nabinghosh/railways_csbs/blob/main/public/assets/Screenshot%202024-04-15%20005745.png)
