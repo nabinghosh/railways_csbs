@@ -20,6 +20,7 @@
     "@emotion/react": "11.11.4",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
+    "@firebasegen/default-connector": "link:dataconnect-generated\\js\\default-connector",
     "@fontsource/inter": "5.0.17",
     "@fontsource/plus-jakarta-sans": "5.0.19",
     "@fontsource/roboto-mono": "5.0.17",
