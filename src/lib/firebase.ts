@@ -10,14 +10,14 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCJeSwlUc16LaCpbuoB20KBPzk1lTie5kQ",
+  apiKey: "",
   authDomain: "railway-reservation-csbs.firebaseapp.com",
   databaseURL: "https://railway-reservation-csbs-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "railway-reservation-csbs",
   storageBucket: "railway-reservation-csbs.appspot.com",
-  messagingSenderId: "423531585880",
-  appId: "1:423531585880:web:f11489659968489728452d",
-  measurementId: "G-QPQJEZRD4T"
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 const app = !getApps.length ? initializeApp(firebaseConfig) : getApp();
